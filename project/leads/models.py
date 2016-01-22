@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 
 from .validators import ExpiryDateValidator
 
@@ -43,7 +46,27 @@ class Lead(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return self.slug
+        return reverse('leads:detail', kwargs={'slug': self.slug})
+
+
+def create_slug(instance, new_slug=None):
+    slug = slugify(instance.name)
+    if new_slug is not None:
+        slug = new_slug
+    qs = Lead.objects.filter(slug=slug).order_by('-id')
+    exists = qs.exists()
+    if exists:
+        new_slug = '%s-%s' % (slug, qs.first().id)
+        return create_slug(instance, new_slug=new_slug)
+    return slug
+
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = create_slug(instance)
+
+
+pre_save.connect(pre_save_post_receiver, sender=Lead)
 
 
 class Language(models.Model):

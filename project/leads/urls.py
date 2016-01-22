@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from .views import LeadCreateView
+from .views import LeadCreateView, LeadDetailView, LeadListView, LeadUpdateView
 
 urlpatterns = [
+    url(r'^$', LeadListView.as_view(), name='list'),
     url(r'^create/$', LeadCreateView.as_view(), name='create'),
+    url(r'^(?P<slug>[\w-]+)/edit/$', LeadUpdateView.as_view(), name='edit'),
+    url(r'^(?P<slug>[\w-]+)/$', LeadDetailView.as_view(), name='detail'),
 ]

@@ -1,0 +1,134 @@
+{% extends 'leads.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{% url 'leads:list' %}">Home</a>
+                        </li>
+                        <li class="active">Tour Leads</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                {% if messages %}
+                    <ul class="meesages">
+                        {% for message in messages %}
+                            <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+                                {% if 'html_tag' in message.tags %}
+                                    {{ message|safe }}
+                                {% else %}
+                                    {{ message }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="col-md-12">
+                    <a href="{% url 'leads:create' %}" class="btn btn-primary"><i class="fa fa-plus fa-fw"></i>Add Lead</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="POST" action="#">
+                    {% csrf_token %}
+                    <table class="table">
+                        <thead>
+                            <tr class="active">
+                                <th>Choose</th>
+                                <th>Operation</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Card Number</th>
+                                <th>Expire Date</th>
+                                <th>Professional</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for object in object_list %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="check-selected" name="leadsToDelete" value="{{ object.pk }}" />
+                                </td>
+                                <td>
+                                    <a href="{{ object.get_absolute_url }}/edit/">Edit</a>|
+                                    <a href="{{ object.get_absolute_url }}/delete/" class="object-delete" data-url="#" >Delete</a>
+                                </td>
+                                <td>
+                                    {% if object.name %}
+                                        <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if object.gender %}
+                                        {{ object.get_gender_display }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if object.card_number %}
+                                        {{ object.card_number }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if object.expiry_date %}
+                                        {{ object.expiry_date }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if object.professional %}
+                                        {{ object.get_professional_display }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                                No leads.
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-3 ">
+                    <input type="checkbox" class="select-all">Select All
+                    <button class="btn btn-primary pull-right" id="btnListDelete"><i class="fa fa-remove
+                fa-fw "></i>Delete</button>
+                </div>
+                </form>
+                <div class="col-md-9 ">
+                    {% if is_paginated %}
+                    <ul class="pagination pull-right ">
+                        {% if page_obj.has_previous %}
+                            <li>
+                                <a href="{% url 'leads:list' %}?page={{ page_obj.previous_page_number }}">Prev</a>
+                            </li>
+                        {% endif %}
+                        {% for i in "x"|rjust:page_obj.paginator.num_pages %}
+                            <li {% if forloop.counter == page_obj.number %}class="active"{% endif %}>
+                                <a href="{% url 'leads:list' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li>
+                                <a href="{% url 'leads:list' %}?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -36,8 +36,8 @@ class LeadForm(forms.ModelForm):
 
     class Meta:
         model = Lead
-        # exclude = ['slug']
-        fields = '__all__'
+        exclude = ['slug']
+        # fields = '__all__'
         widgets = {
             'gender': RadioSelect(),
             'expiry_date': DateTimePicker(options={'format': 'YYYY-MM-DD'}),
