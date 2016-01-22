@@ -1,6 +1,7 @@
 import datetime
 
-from django.core.exceptions import RegexValidator, ValidationError
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 
 
