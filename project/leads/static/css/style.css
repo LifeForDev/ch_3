@@ -1,3 +1,11 @@
 .asteriskField {
     display: none;
 }
+
+.languages {
+    margin-bottom: 15px;
+}
+
+.formset-template{
+    display: none;
+}

@@ -74,7 +74,7 @@ pre_save.connect(pre_save_post_receiver, sender=Lead)
 
 class Language(models.Model):
     name = models.CharField(max_length=120)
-    lead = models.ForeignKey(Lead)
+    lead = models.ForeignKey(Lead, related_name='languages')
 
     def __unicode__(self):
         return self.name

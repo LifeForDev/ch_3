@@ -56,8 +56,8 @@
                                     <input type="checkbox" class="check-selected" name="leadsToDelete" value="{{ object.pk }}" />
                                 </td>
                                 <td>
-                                    <a href="{{ object.get_absolute_url }}/edit/">Edit</a>|
-                                    <a href="{{ object.get_absolute_url }}/delete/" class="object-delete" data-url="#" >Delete</a>
+                                    <a href="{{ object.get_absolute_url }}edit/">Edit</a>|
+                                    <a href="{{ object.get_absolute_url }}delete/" class="object-delete" data-url="#" >Delete</a>
                                 </td>
                                 <td>
                                     {% if object.name %}

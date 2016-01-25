@@ -1,6 +1,8 @@
 from django import forms
+from django.forms import BaseInlineFormSet
 from django.forms.models import inlineformset_factory
-from django.forms.widgets import RadioSelect
+from django.forms.widgets import RadioSelect, HiddenInput
+from django.forms.formsets import DELETION_FIELD_NAME
 from django.utils.translation import ugettext_lazy as _
 
 from bootstrap3_datetime.widgets import DateTimePicker
@@ -17,28 +19,8 @@ class LeadForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(LeadForm, self).__init__(*args, **kwargs)
 
-        # self.helper = FormHelper(self)
-        # self.helper.form_method = 'POST'
-        # self.helper.form_action = '#'
-        # self.helper.form_class = 'form-horizontal'
-        # self.helper.label_class = 'col-sm-2'
-        # self.helper.field_class = 'col-sm-10'
-        # self.helper.add_input(Submit('submit', _('Submit'),
-        #                              css_class='btn btn-default'))
-        # self.helper.layout = Layout(
-        #     Field('name', placeholder=_('John Doe')),
-        #     InlineRadios('gender'),
-        #     Field('card_number', placeholder=_('XXXXXXXXXXXXXXXX')),
-        #     Field('expiry_date', placeholder=_('2015-11-20')),
-        #     InlineRadios('professional'),
-        #     Field('slug')
-        # )
-
         self.helper1 = FormHelper(self)
         self.helper1.form_tag = False
-        # print dir(self.helper1)
-        print dir(self.helper1['name'].update_attributes)
-        # self.helper1['name'].wrap(Field, wrapper_class="housenumber")
         self.helper1.label_class = 'col-sm-2'
         self.helper1.field_class = 'col-sm-10'
         self.helper1.layout = Layout(
@@ -84,7 +66,7 @@ class LanguageForm(forms.ModelForm):
         self.helper.layout = Layout(
             FieldWithButtons(
                 Field('name', placeholder=_('English')),
-                StrictButton("Add", onclick="addField(event)")),
+                StrictButton("Add")),
             )
 
     class Meta:
@@ -92,10 +74,31 @@ class LanguageForm(forms.ModelForm):
         fields = ('name',)
 
 
+class RequiredFirstFormSet(BaseInlineFormSet):
+    def clean(self):
+        count = 0
+        for form in self.forms:
+            try:
+                if form.cleaned_data:
+                    count += 1
+            except AttributeError:
+                # annoyingly, if a subform is invalid Django explicity raises
+                # an AttributeError for cleaned_data
+                pass
+        if count < 1:
+            raise forms.ValidationError(_('You must have at least one Language'))
+
+    def add_fields(self, form, index):
+        # Hide delete checkbox from formset
+        super(RequiredFirstFormSet, self).add_fields(form, index)
+        form.fields[DELETION_FIELD_NAME].widget = HiddenInput()
+
+
 LanguageFormset = inlineformset_factory(
     Lead,
     Language,
     form=LanguageForm,
+    formset=RequiredFirstFormSet,
     extra=1,
-    can_delete=False
+    can_delete=True
 )
