@@ -45,6 +45,9 @@ class Lead(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['-pk']
+
     def get_absolute_url(self):
         return reverse('leads:detail', kwargs={'slug': self.slug})
 
@@ -53,10 +56,10 @@ def create_slug(instance, new_slug=None):
     slug = slugify(instance.name)
     if new_slug is not None:
         slug = new_slug
-    qs = Lead.objects.filter(slug=slug).order_by('-id')
+    qs = Lead.objects.filter(slug=slug).order_by('-pk')
     exists = qs.exists()
     if exists:
-        new_slug = '%s-%s' % (slug, qs.first().id)
+        new_slug = '%s-%s' % (slug, qs.first().pk)
         return create_slug(instance, new_slug=new_slug)
     return slug
 
