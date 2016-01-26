@@ -39,7 +39,6 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'crispy_forms',
-    'bootstrap3_datetime',
 ]
 
 PROJECT_APPS = [

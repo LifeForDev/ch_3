@@ -81,7 +81,11 @@
                                 </td>
                                 <td>
                                     {% for language in object.languages.all %}
-                                        {{ language }}
+                                        {% if not forloop.last %}
+                                            {{ language }},
+                                        {% else %}
+                                            {{ language }}
+                                        {% endif %}
                                     {% endfor %}
                                 </td>
                                 <td>
@@ -97,11 +101,17 @@
                     </table>
                 </div>
             </div>
-            <div class="row ">
+            <hr>
+            <hr>
+            <div class="row">
                 <div class="col-md-3 ">
-                    <input type="checkbox" class="select-all">Select All
-                    <button class="btn btn-primary pull-right" id="btnListDelete"><i class="fa fa-remove
-                fa-fw "></i>Delete</button>
+                    <input type="checkbox" class="select-all" onclick="selectAll(event)"> Select All
+                    <form method="POST" action="" id="deleteForm">
+                        <input type="hidden" name="ids" value="">
+                        <button class="btn btn-primary pull-right" id="btnListDelete">
+                            <i class="fa fa-remove fa-fw "></i>Delete
+                        </button>
+                    </form>
                 </div>
                 </form>
                 <div class="col-md-9 ">
@@ -138,3 +148,6 @@
         </div>
     </div>
 {% endblock %}
+{% block local_js %}
+    <script type="text/javascript" src="{% static 'js/delete.js' %}"></script>
+{% endblock local_js %}

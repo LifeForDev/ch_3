@@ -6,22 +6,23 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from .validators import ExpiryDateValidator
 
 
-GENDER_CHOICES = (
-    ('M', 'Male'),
-    ('F', 'Female')
-)
-
-PROFESSIONAL_CHOICES = (
-    ('Y', 'Yes'),
-    ('N', 'No')
-)
-
-
 class Lead(models.Model):
+
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female')
+    )
+
+    PROFESSIONAL_CHOICES = (
+        ('Y', 'Yes'),
+        ('N', 'No')
+    )
+
     name = models.CharField(max_length=120)
     gender = models.CharField(
             max_length=6, choices=GENDER_CHOICES, default='M')
@@ -51,6 +52,10 @@ class Lead(models.Model):
     def get_absolute_url(self):
         return reverse('leads:detail', kwargs={'slug': self.slug})
 
+    def clean(self):
+        if bool(self.card_number) != bool(self.expiry_date):
+            raise ValidationError(_('Check please Card number or Expiry Date'))
+
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.name)
@@ -74,7 +79,8 @@ pre_save.connect(pre_save_post_receiver, sender=Lead)
 
 class Language(models.Model):
     name = models.CharField(max_length=120)
-    lead = models.ForeignKey(Lead, related_name='languages')
+    lead = models.ForeignKey(Lead, related_name='languages',
+                             on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name

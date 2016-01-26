@@ -21,5 +21,5 @@ from django.views.generic import RedirectView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^leads/', include('leads.urls', namespace='leads')),
-    url(r'^$', RedirectView.as_view(pattern_name='leads:create', permanent=False)),
+    url(r'^$', RedirectView.as_view(pattern_name='leads:list', permanent=False)),
 ]

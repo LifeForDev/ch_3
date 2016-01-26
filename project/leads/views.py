@@ -1,7 +1,9 @@
-from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, RedirectView
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
+from django.shortcuts import redirect
+from django.http import HttpResponse
 
 from .forms import LeadForm, LanguageFormset
 from .models import Lead
@@ -11,7 +13,6 @@ class LeadCreateView(CreateView):
     model = Lead
     form_class = LeadForm
     template_name = 'leads/form.html'
-    success_url = reverse_lazy('leads:list')
 
     def get_context_data(self, *args, **kwargs):
         context = super(LeadCreateView, self).get_context_data(*args, **kwargs)
@@ -19,14 +20,13 @@ class LeadCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        # context = self.get_context_data()
-        # formset = context['formset']
-        instance = form.save(commit=False)
-        formset = LanguageFormset(self.request.POST, instance=instance)
-        if formset.is_valid:
-            form.save()
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
             formset.save()
-            return super(LeadCreateView, self).form_valid(form)
+            return redirect(reverse('leads:list'))
 
     def save(self, *args, **kwargs):
         messages.success(_('Successfully created!'))
@@ -51,15 +51,29 @@ class LeadUpdateView(UpdateView):
         return context
 
     def form_valid(self, form):
-        instance = form.save(commit=False)
-        formset = LanguageFormset(self.request.POST, instance=instance)
-        if formset.is_valid:
-            form.save()
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
             formset.save()
-            return super(LeadUpdateView, self).form_valid(form)
+            return redirect(reverse('leads:list'))
+        else:
+            return redirect(reverse('leads:list'))
 
 
 class LeadListView(ListView):
     model = Lead
     template_name = 'leads/list.html'
     paginate_by = 10
+
+
+class LeadDeleteView(RedirectView):
+    url = reverse_lazy('leads:list')
+
+    def get(self, request, slug, *args, **kwargs):
+        obj = Lead.objects.get(slug=slug)
+        if obj:
+            obj.delete()
+
+        return super(LeadDeleteView, self).get(request, *args, **kwargs)

@@ -38,114 +38,16 @@
         </div>
     </div>
     <div id="formset-template" class="formset-template">
-        <div class="formset-languages" data-id="__prefix__">
+        <div class="form-group" data-id="__prefix__">
             {% crispy formset.empty_form %}
+            <input id="id_languages-__prefix__-id" name="languages-__prefix__-id" type="hidden"><input id="id_languages-__prefix__-DELETE" name="languages-__prefix__-DELETE" type="hidden">
+            <input id="id_languages-__prefix__-lead" name="languages-__prefix__-lead" type="hidden">
         </div>
     </div>
 
-
-    <script type="text/javascript" src="{% static 'js/addField.js' %}"></script>
 {% endblock content %}
 
-
-{% block content_orig %}
-    <div class="section ">
-                <div class="container ">
-                    <div class="row ">
-                        <div class="col-md-12 ">
-                            <ul class="breadcrumb ">
-                                <li>
-                                    <a href="# ">Home</a>
-                                </li>
-                                <li>
-                                    <a href="# ">Tour Leads</a>
-                                </li>
-                                <li class="active ">Add Lead</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-12 ">
-                            <form class="form-horizontal " role="form ">
-                                <div class="form-group ">
-                                    <div class="col-sm-2 ">
-                                        <label for="inputEmail3 " class="control-label ">Name</label>
-                                    </div>
-                                    <div class="col-sm-10 ">
-                                        <input type="text " class="form-control " id="inputEmail3
-                        " placeholder="John Doe ">
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="col-sm-2 ">
-                                        <label for="gender " class="control-label ">Gender</label>
-                                    </div>
-                                    <div class="col-sm-10 ">
-                                        <input type="radio" id="gender" value="M">
-                                        <label>Male</label>
-                                        <input type="radio" id="gender" value="F">
-                                        <label>Female</label>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="col-sm-2 ">
-                                        <label for="languages " class="control-label ">Languages</label>
-                                    </div>
-                                    <div class="col-sm-10">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="languages" placeholder="Chinese">
-                                            <span class="input-group-btn">
-                                                <button class="btn">
-                                                    <i class="fa fa-plus fa-fw"></i>Add</button>
-                                            </span>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="languages" placeholder="English">
-                                            <span class="input-group-btn">
-                                                <button class="btn">
-                                                    <i class="fa fa-remove fa-fw"></i>Remove</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="col-sm-2 ">
-                                        <label for="card " class="control-label ">Card Number</label>
-                                    </div>
-                                    <div class="col-sm-10 ">
-                                        <input type="text " class="form-control " id="card
-                        " placeholder="XXXXXXXXXXXXXXX ">
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="col-sm-2 ">
-                                        <label for="date " class="control-label ">Expiry Date</label>
-                                    </div>
-                                    <div class="col-sm-10 ">
-                                        <input type="text " class="form-control " id="date
-                        " placeholder="2015-11-20 ">
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="col-sm-2 ">
-                                        <label for="pro " class="control-label ">Professional</label>
-                                    </div>
-                                    <div class="col-sm-10 ">
-                                        <input type="radio" id="pro" value="Y ">
-                                        <label>Yes</label>
-                                        <input type="radio" id="pro" value="N ">
-                                        <label>No</label>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="col-sm-offset-2 col-sm-10 ">
-                                        <button type="submit " class="btn btn-default ">
-                                            <i class="fa fa-save fa-fw "></i>Submit</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-</div>
-{% endblock content_orig %}
+{% block local_js %}
+    <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datepicker.js' %}"></script>
+{% endblock local_js %}

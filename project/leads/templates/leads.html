@@ -5,8 +5,8 @@
         <title>Tour Lead CRUD Test</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
         rel="stylesheet" type="text/css">
         <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css"
@@ -16,7 +16,7 @@
         <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
     </head>
     <body>
-
+        {% include "leads/messages_display.html" %}
         <div class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
@@ -43,8 +43,9 @@
 
         {% block content %}{% endblock content %}
 
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous">
-        </script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        {% block local_js %}{% endblock local_js %}
     </body>
     </html>
