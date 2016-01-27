@@ -26,6 +26,7 @@ function removeForm(type, elem) {
 }
 
 $(document).ready(function() {
+    $('#formLead .alert-block').first().hide();
     var elems = $('#languages .form-group');
     $.each(elems, function(index) {
         $(this).attr('data-id', index);
@@ -55,7 +56,6 @@ $(document).ready(function() {
             event.preventDefault();
             addForm('languages');
         });
-    $('#formLead .alert-block').first().hide();
 });
 
 $('#formLead').submit(function() {

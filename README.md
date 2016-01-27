@@ -33,6 +33,9 @@ $ virtualenv .virtenv
 $ source .virtenv/bin/activate
 $ pip install -r requirements.txt
 $ cd project
+$ python manage.py migrate
+$ python manage.py makemigrations
+$ python manage.py migrate
 $ python manage.py runserver
 ```
 
