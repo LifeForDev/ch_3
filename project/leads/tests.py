@@ -3,7 +3,7 @@ import datetime
 from django.test import TestCase
 
 from .models import Lead, Language
-from .forms import LeadForm, LanguageFormset
+from .forms import LeadForm
 
 
 class SlugTestCase(TestCase):
@@ -76,15 +76,3 @@ class LeadFormTestCase(TestCase):
         for date in incorrect_date:
             self.lead_Petr['expiry_date'] = date
             self.assertFalse(LeadForm(self.lead_Petr).is_valid())
-
-
-# class LanguageFormsetTestCase(TestCase):
-#     lead_Petr = {
-#         'name': 'Petr',
-#         'gender': 'M',
-#         'professional': 'Y',
-#         'language': 'English',
-#     }
-
-#     def test_language_incorrect(self):
-#         self.assertFalse(LanguageFormset(instance=self.lead_Petr).is_valid())
