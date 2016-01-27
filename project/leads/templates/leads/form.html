@@ -4,37 +4,35 @@
 
 
 {% block content %}
-    <div class="container ">
-        <div class="row ">
-            <div class="col-md-12 ">
-                <ul class="breadcrumb ">
-                    <li>
-                        <a href="# ">Home</a>
-                    </li>
-                    <li>
-                        <a href="# ">Tour Leads</a>
-                    </li>
-                    <li class="active ">Add Lead</li>
-                </ul>
-            </div>
+    <div class="row">
+        <div class="col-md-12 ">
+            <ul class="breadcrumb ">
+                <li>
+                    <a href="{% url 'leads:list' %}">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'leads:list' %}">Tour Leads</a>
+                </li>
+                <li class="active">Add Lead</li>
+            </ul>
         </div>
-        <div class="row ">
-            <div class="col-md-12 ">
-                <form class="" role="form" method="POST">
-                    {% crispy form form.helper1 %}
-                    <div class="languages row" id="languages">
-                        {% crispy formset formset.form.helper %}
+    </div>
+    <div class="row ">
+        <div class="col-md-12 ">
+            <form class="" id="formLead" role="form" method="POST">
+                {% crispy form form.helper1 %}
+                <div class="languages row" id="languages">
+                    {% crispy formset formset.form.helper %}
+                </div>
+                {% crispy form form.helper2 %}
+                <div class="form-group ">
+                    <div class="col-sm-offset-2 col-sm-10 ">
+                        <button type="submit" class="btn btn-default ">
+                            <i class="fa fa-save fa-fw "></i>Submit
+                        </button>
                     </div>
-                    {% crispy form form.helper2 %}
-                    <div class="form-group ">
-                        <div class="col-sm-offset-2 col-sm-10 ">
-                            <button type="submit" class="btn btn-default ">
-                                <i class="fa fa-save fa-fw "></i>Submit
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
     <div id="formset-template" class="formset-template">
@@ -44,7 +42,6 @@
             <input id="id_languages-__prefix__-lead" name="languages-__prefix__-lead" type="hidden">
         </div>
     </div>
-
 {% endblock content %}
 
 {% block local_js %}

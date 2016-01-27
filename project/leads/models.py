@@ -43,12 +43,6 @@ class Lead(models.Model):
             max_length=3, choices=PROFESSIONAL_CHOICES, default='N')
     slug = models.SlugField(max_length=40, unique=True)
 
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['-pk']
-
     def get_absolute_url(self):
         return reverse('leads:detail', kwargs={'slug': self.slug})
 
@@ -56,9 +50,28 @@ class Lead(models.Model):
         if bool(self.card_number) != bool(self.expiry_date):
             raise ValidationError(_('Check please Card number or Expiry Date'))
 
+    def __unicode__(self):
+        return self.name
 
+    class Meta:
+        ordering = ['-pk']
+
+
+class Language(models.Model):
+    name = models.CharField(max_length=120)
+    lead = models.ForeignKey(Lead, related_name='languages',
+                             on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return self.name
+
+
+# SIGNALS for create Unique Slug
 def create_slug(instance, new_slug=None):
-    slug = slugify(instance.name)
+    if instance.name not in ['create', 'delete']:
+        slug = slugify(instance.name)
+    else:
+        slug = slugify('unknown')
     if new_slug is not None:
         slug = new_slug
     qs = Lead.objects.filter(slug=slug).order_by('-pk')
@@ -75,12 +88,3 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(pre_save_post_receiver, sender=Lead)
-
-
-class Language(models.Model):
-    name = models.CharField(max_length=120)
-    lead = models.ForeignKey(Lead, related_name='languages',
-                             on_delete=models.CASCADE)
-
-    def __unicode__(self):
-        return self.name

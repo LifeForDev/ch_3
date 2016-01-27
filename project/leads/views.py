@@ -1,9 +1,11 @@
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView, ListView, UpdateView, RedirectView
+from django.views.generic import (
+    CreateView, DetailView, ListView,
+    UpdateView, RedirectView
+)
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.http import HttpResponse
 
 from .forms import LeadForm, LanguageFormset
 from .models import Lead
@@ -26,11 +28,11 @@ class LeadCreateView(CreateView):
             self.object = form.save()
             formset.instance = self.object
             formset.save()
+            messages.success(self.request, _('Lead successfully created!'))
             return redirect(reverse('leads:list'))
-
-    def save(self, *args, **kwargs):
-        messages.success(_('Successfully created!'))
-        super(LeadCreateView, self).save(*args, **kwargs)
+        else:
+            messages.error(self.request, _('Pls fill the languages'))
+            return self.form_invalid(form)
 
 
 class LeadDetailView(DetailView):
@@ -43,7 +45,6 @@ class LeadUpdateView(UpdateView):
     template_name = 'leads/form.html'
     form_class = LeadForm
     success_url = reverse_lazy('leads:list')
-    success_message = _('Successfully updated!')
 
     def get_context_data(self, *args, **kwargs):
         context = super(LeadUpdateView, self).get_context_data(*args, **kwargs)
@@ -57,9 +58,11 @@ class LeadUpdateView(UpdateView):
             self.object = form.save()
             formset.instance = self.object
             formset.save()
+            messages.success(self.request, _('Lead successfully updated!'))
             return redirect(reverse('leads:list'))
         else:
-            return redirect(reverse('leads:list'))
+            messages.error(self.request, _('Pls fill the languages'))
+            return self.form_invalid(form)
 
 
 class LeadListView(ListView):
@@ -71,9 +74,10 @@ class LeadListView(ListView):
 class LeadDeleteView(RedirectView):
     url = reverse_lazy('leads:list')
 
-    def get(self, request, slug, *args, **kwargs):
-        obj = Lead.objects.get(slug=slug)
-        if obj:
-            obj.delete()
-
-        return super(LeadDeleteView, self).get(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        delete_leads = request.POST.get('ids').split(',')
+        if delete_leads:
+            queryset = Lead.objects.filter(id__in=delete_leads)
+            queryset.delete()
+            messages.success(self.request, _('Successfully deleted!'))
+        return super(LeadDeleteView, self).post(request, *args, **kwargs)

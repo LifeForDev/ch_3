@@ -21,7 +21,7 @@ function addForm(type) {
 
 function removeForm(type, elem) {
     var elem_id = elem.data('id');
-    $('#id_'+type+'-'+elem_id+'-DELETE').val("1");
+    $('#id_' + type + '-' + elem_id + '-DELETE').val("1");
     elem.hide();
 }
 
@@ -34,8 +34,8 @@ $(document).ready(function() {
         }
     })
 
-    first_button = $('#languages > .form-group').first();
-    remove_button = $('#languages > .form-group').slice(1)
+    first_button = $('#languages .form-group').first();
+    remove_button = $('#languages .form-group').slice(1)
     remove_button.find('label').html('');
     remove_button
         .find('.btn')

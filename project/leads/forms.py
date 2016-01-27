@@ -99,6 +99,8 @@ LanguageFormset = inlineformset_factory(
     Language,
     form=LanguageForm,
     formset=RequiredFirstFormSet,
-    extra=1,
+    validate_min=1,
+    min_num=1,
+    extra=0,
     can_delete=True
 )

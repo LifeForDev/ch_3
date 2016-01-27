@@ -5,19 +5,27 @@ function selectAll(event) {
     });
 }
 
-$('#deleteForm').submit(function() {
-    alert('hello');
-});
+function deletePatch(event) {
+    event.preventDefault();
+    var ids = [];
+    $('.check-selected:checked').each(function() {
+       ids.push($(this).val());
+    });
 
-// function delete-leads() {
-//     var ids = [];
-//     $('.check-selected:checked').each(function() {
-//        ids.push($(this).data('id'));
-//     });
-//     alert(ids);
-// }
+    if (ids.length === 0) {
+        return false;
+    } else {
+        if (confirm('Are you sure to delete this Lead(s)?')) {
+            $('#deleteForm_ids').val(ids);
+            $('#deleteForm').submit();
+        }
+    }
+}
 
-// $('#deleteForm').submit(function() {
-//   alert('Handler for .submit() called.');
-//   return false;
-// });
+function deleteLead(event, id) {
+    event.preventDefault();
+    if (confirm('Are you sure to delete this Lead(s)?')) {
+        $('#deleteForm_ids').val(id);
+        $('#deleteForm').submit();
+    }
+}
