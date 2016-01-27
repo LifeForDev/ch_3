@@ -75,8 +75,9 @@ class LeadDeleteView(RedirectView):
     url = reverse_lazy('leads:list')
 
     def post(self, request, *args, **kwargs):
-        delete_leads = request.POST.get('ids').split(',')
-        if delete_leads:
+        if request.POST.get('ids'):
+            delete_leads = request.POST.get('ids').split(',')
+        if delete_leads.count > 0:
             queryset = Lead.objects.filter(id__in=delete_leads)
             queryset.delete()
             messages.success(self.request, _('Successfully deleted!'))

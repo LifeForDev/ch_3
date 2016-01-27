@@ -2,8 +2,8 @@ import datetime
 
 from django.test import TestCase
 
-from .models import Lead
-from .forms import LeadForm
+from .models import Lead, Language
+from .forms import LeadForm, LanguageFormset
 
 
 class SlugTestCase(TestCase):
@@ -23,6 +23,16 @@ class SlugTestCase(TestCase):
     def test_create_slug_permission(self):
         result = Lead.objects.filter(slug__in=['create', 'delete'])
         self.assertFalse(result)
+
+
+class LanguageTestCase(TestCase):
+    def test_create_language_without_lead(self):
+        result = False
+        try:
+            Language.objects.create(name='English')
+        except:
+            result = True
+        self.assertTrue(result)
 
 
 class LeadFormTestCase(TestCase):
@@ -66,3 +76,15 @@ class LeadFormTestCase(TestCase):
         for date in incorrect_date:
             self.lead_Petr['expiry_date'] = date
             self.assertFalse(LeadForm(self.lead_Petr).is_valid())
+
+
+# class LanguageFormsetTestCase(TestCase):
+#     lead_Petr = {
+#         'name': 'Petr',
+#         'gender': 'M',
+#         'professional': 'Y',
+#         'language': 'English',
+#     }
+
+#     def test_language_incorrect(self):
+#         self.assertFalse(LanguageFormset(instance=self.lead_Petr).is_valid())
