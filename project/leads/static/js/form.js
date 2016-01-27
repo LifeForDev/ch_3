@@ -29,13 +29,17 @@ $(document).ready(function() {
     var elems = $('#languages .form-group');
     $.each(elems, function(index) {
         $(this).attr('data-id', index);
+        if (index == 0) {
+            $('#id_languages-'+ index +'-DELETE').val('');
+            return;
+        }
         if ($('#id_languages-'+ index +'-DELETE').val() == 1) {
             $(this).hide();
         }
     })
 
-    first_button = $('#languages .form-group').first();
-    remove_button = $('#languages .form-group').slice(1)
+    first_button = elems.first();
+    remove_button = elems.slice(1)
     remove_button.find('label').html('');
     remove_button
         .find('.btn')
@@ -51,4 +55,18 @@ $(document).ready(function() {
             event.preventDefault();
             addForm('languages');
         });
+    $('#formLead .alert-block').first().hide();
+});
+
+$('#formLead').submit(function() {
+    var languag_length = $('#id_languages-TOTAL_FORMS').val();
+    for (var i = 1; i < languag_length; i++) {
+        if ($('#id_languages-' + i + '-name').val() != '' &&
+            $('#id_languages-' + i + '-DELETE').val() == '') {
+
+            if ($('#id_languages-0-name').val() == '') {
+                $('#id_languages-0-DELETE').val('1');
+            }
+        }
+    }
 });

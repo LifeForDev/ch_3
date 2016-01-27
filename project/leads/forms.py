@@ -19,6 +19,7 @@ class LeadForm(forms.ModelForm):
 
         self.helper1 = FormHelper(self)
         self.helper1.form_tag = False
+        self.helper1.html5_required = True
         self.helper1.form_show_errors = True
         self.helper1.label_class = 'col-sm-2'
         self.helper1.field_class = 'col-sm-10'
@@ -29,6 +30,7 @@ class LeadForm(forms.ModelForm):
 
         self.helper2 = FormHelper(self)
         self.helper2.form_show_errors = True
+        self.helper2.html5_required = True
         self.helper2.form_tag = False
         self.helper2.disable_csrf = True
         self.helper2.label_class = 'col-sm-2'
@@ -100,7 +102,6 @@ LanguageFormset = inlineformset_factory(
     form=LanguageForm,
     formset=RequiredFirstFormSet,
     validate_min=1,
-    min_num=1,
-    extra=0,
+    extra=1,
     can_delete=True
 )
